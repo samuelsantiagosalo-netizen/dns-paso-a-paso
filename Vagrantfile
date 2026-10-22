@@ -1,0 +1,17 @@
+# -*- mode: ruby -*
+# vi: set ft=ruby :
+Vagrant.configure("2") do |config|
+  # Descarga la iso de debian
+  config.vm.box = "debian/bookworm64" 
+  
+  config.vm.define "server" do |srv|
+    # Ese sera el nombre de la vm
+    srv.vm.hostname = "debian"
+    
+    # Crea una red privada de solo anfitrion y le da una IP estatica
+    srv.vm.network "private_network", ip: "192.168.56.10"
+    
+    # Ejecuta el script bootstrap.sh que hace se haga la instalación automatica al arrancar por primera vez
+    srv.vm.provision "shell", path: "bootstrap.sh"
+  end
+end
