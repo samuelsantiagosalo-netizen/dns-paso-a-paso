@@ -123,3 +123,38 @@ cp /etc/bind/named.conf.options /etc/bind/named.conf.options.backup
 cp /vagrant/config/named.conf.options /etc/bind/named.conf.options
 systemctl restart named
 ```
+## 4.2. Configuración named.conf.local
+En este fichero declaramos las zonas autoritativas (maestras) de nuestro servidor DNS, tanto la zona de búsqueda directa como la inversa para la red `192.168.56.0/24`. Primero hacemos copia de seguridad y extraemos el archivo a `config/`:
+
+```bash
+vagrant@debian:~$ sudo cp /etc/bind/named.conf.local /etc/bind/named.conf.local.backup
+vagrant@debian:~$ sudo cp /etc/bind/named.conf.local /vagrant/config/named.conf.local
+```
+
+Editamos `config/named.conf.local` añadiendo ambas zonas apuntando a `/var/lib/bind/`:
+
+```text
+zone "sistema.sol" {
+    type master;
+    file "/var/lib/bind/sistema.sol.dns";
+};
+
+zone "56.168.192.in-addr.arpa" {
+    type master;
+    file "/var/lib/bind/56.168.192.rev";
+};
+```
+
+Copiamos el archivo a `/etc/bind/` en la máquina virtual y validamos su sintaxis con `named-checkconf`:
+
+```bash
+vagrant@debian:~$ sudo cp /vagrant/config/named.conf.local /etc/bind/named.conf.local
+vagrant@debian:~$ sudo named-checkconf /etc/bind/named.conf.local
+```
+
+Por último, añadimos la copia de este archivo a nuestro script de aprovisionamiento `bootstrap.sh`:
+
+```bash
+cp /etc/bind/named.conf.local /etc/bind/named.conf.local.backup
+cp /vagrant/config/named.conf.local /etc/bind/named.conf.local
+```
