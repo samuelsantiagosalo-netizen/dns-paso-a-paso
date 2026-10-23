@@ -14,5 +14,9 @@ systemctl restart named
 cp /etc/bind/named.conf.options /etc/bind/named.conf.options.backup
 cp /vagrant/config/named.conf.options /etc/bind/named.conf.options
 
+# Configuración local de zonas (named.conf.local)
+cp /etc/bind/named.conf.local /etc/bind/named.conf.local.backup
+cp /vagrant/config/named.conf.local /etc/bind/named.conf.local
+
 # Reiniciar el servicio para aplicar todos los cambios
 systemctl restart named
