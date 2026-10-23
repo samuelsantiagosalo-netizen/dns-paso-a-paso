@@ -74,3 +74,52 @@ Por último, añadimos en `bootstrap.sh` los comandos para copiar este archivo d
 cp /vagrant/config/named /etc/default/named
 systemctl restart named
 ```
+
+## 4.1. Configuración named.conf.options
+Realizamos una copia de seguridad del archivo original y lo extraemos a la carpeta compartida `config/` del repositorio:
+
+```bash
+vagrant@debian:~$ sudo cp /etc/bind/named.conf.options /etc/bind/named.conf.options.backup
+vagrant@debian:~$ sudo cp /etc/bind/named.conf.options /vagrant/config/named.conf.options
+```
+
+Editamos el fichero `config/named.conf.options` definiendo la lista de control de acceso (`acl confiables`) para nuestra red `192.168.56.0/24`, indicando que escuche en la IP `192.168.56.10` y deshabilitando IPv6:
+
+```text
+acl confiables {
+    192.168.56.0/24;
+};
+
+options {
+    directory "/var/cache/bind";
+
+    allow-transfer { none; };
+    listen-on port 53 { 192.168.56.10; };
+    recursion yes;
+    allow-recursion { confiables; };
+
+    dnssec-validation yes;
+
+    // listen-on-v6 { any; };
+};
+```
+
+Copiamos el archivo de vuelta a `/etc/bind/`, comprobamos la sintaxis con `named-checkconf` y verificamos que el servicio reinicia sin errores:
+
+```bash
+vagrant@debian:~$ sudo cp /vagrant/config/named.conf.options /etc/bind/named.conf.options
+vagrant@debian:~$ sudo named-checkconf /etc/bind/named.conf.options
+vagrant@debian:~$ sudo systemctl restart named
+vagrant@debian:~$ sudo systemctl status named
+● named.service - BIND Domain Name Server
+     Loaded: loaded (/lib/systemd/system/named.service; enabled; preset: enabled)
+     Active: active (running)
+```
+
+Finalmente, añadimos las líneas de provisión correspondientes a nuestro script `bootstrap.sh`:
+
+```bash
+cp /etc/bind/named.conf.options /etc/bind/named.conf.options.backup
+cp /vagrant/config/named.conf.options /etc/bind/named.conf.options
+systemctl restart named
+```
