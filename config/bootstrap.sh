@@ -21,3 +21,7 @@ named-checkzone 56.168.192.in-addr.arpa /var/lib/bind/samuel.test.rev
 
 # Reiniciar el servicio para aplicar todos los cambios
 systemctl restart named
+
+# Script de autocomprobación 
+chmod +x /vagrant/test.sh
+/vagrant/test.sh
