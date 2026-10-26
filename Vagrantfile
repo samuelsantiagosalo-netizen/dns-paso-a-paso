@@ -12,6 +12,6 @@ Vagrant.configure("2") do |config|
     srv.vm.network "private_network", ip: "192.168.56.10"
     
     # Ejecuta el script bootstrap.sh que hace se haga la instalación automatica al arrancar por primera vez
-    srv.vm.provision "shell", path: "bootstrap.sh"
+    srv.vm.provision "shell", path: "config/bootstrap.sh"
   end
 end

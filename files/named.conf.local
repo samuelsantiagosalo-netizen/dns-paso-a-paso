@@ -6,12 +6,12 @@
 // organization
 //include "/etc/bind/zones.rfc1918";
 
-zone "sistema.sol" {
+zone "samuel.test" {
     type master;
-    file "/var/lib/bind/sistema.sol.dns";
+    file "/var/lib/bind/samuel.test.dns";
 };
 
 zone "56.168.192.in-addr.arpa" {
     type master;
-    file "/var/lib/bind/56.168.192.rev";
+    file "/var/lib/bind/samuel.test.rev";
 };

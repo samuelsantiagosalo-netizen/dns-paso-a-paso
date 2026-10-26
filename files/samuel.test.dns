@@ -1,0 +1,16 @@
+;
+; samuel.test
+;
+$TTL    86400
+@       IN      SOA     debian.samuel.test. admin.samuel.test. (
+                              2          ; Serial
+                              3600       ; Refresh
+                              1800       ; Retry
+                              604800     ; Expire
+                              86400 )    ; Negative Cache TTL
+;
+@       IN      NS      debian.samuel.test.
+debian.samuel.test. IN  A       192.168.56.10
+
+web                 IN  CNAME   debian.samuel.test.
+@                   IN  TXT     "Samuel Santiago Estevez"
